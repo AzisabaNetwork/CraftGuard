@@ -19,6 +19,10 @@ public class RegionRepositoryRegistry {
         return repositories.remove(world);
     }
 
+    public RegionRepository repository(World world) {
+        return repositories.get(world);
+    }
+
     public Region regionAt(Location loc) {
         RegionRepository repository = repositories.get(loc.getWorld());
         return repository == null ? null : repository.regionAt(loc.getBlockX(), loc.getBlockZ());

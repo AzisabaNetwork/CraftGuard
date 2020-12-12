@@ -2,7 +2,16 @@ package amata1219.craft.guard.region;
 
 import org.bukkit.World;
 
-public record Region(World world, Location3d lesser, Location3d greater) {
+import java.util.HashMap;
+import java.util.UUID;
+
+public record Region(
+        int id,
+        World world,
+        Location3d lesser,
+        Location3d greater,
+        HashMap<UUID, ShareLevel> permissions
+) {
 
     public boolean containsIgnoringYCoordinate(int x, int z) {
         return lesser.x() <= x && lesser.z() <= z

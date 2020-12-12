@@ -1,0 +1,10 @@
+package amata1219.craft.guard.region;
+
+public enum ShareLevel {
+
+    EDITING_REGION,
+    EDITING_BLOCKS_AND_ENTITIES,
+    EDITING_CONTAINER_BLOCKS_INVENTORIES,
+    ACCESSING_REDPOWERISH_BLOCKS;
+
+}

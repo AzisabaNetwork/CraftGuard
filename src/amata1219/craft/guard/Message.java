@@ -9,7 +9,9 @@ public enum Message {
     CAN_NOT_USE("use"),
     CAN_NOT_BREAK("break"),
     CAN_NOT_PLACE("place"),
-    CAN_NOT_HARM("harm");
+    CAN_NOT_HARM("harm"),
+    CAN_NOT_OPEN("open"),
+    CAN_NOT_CHANGE("change");
 
     private final String text;
 

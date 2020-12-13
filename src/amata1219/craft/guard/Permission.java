@@ -1,13 +1,7 @@
 package amata1219.craft.guard;
 
-public enum Permission {
+public class Permission {
 
-    ADMIN("craft.guard.admin");
-
-    public final String permission;
-
-    private Permission(String permission) {
-        this.permission = permission;
-    }
+    public static final String ADMIN = "craft.guard.admin";
 
 }

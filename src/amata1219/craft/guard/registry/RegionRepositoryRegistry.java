@@ -25,7 +25,7 @@ public class RegionRepositoryRegistry {
 
     public Region regionAt(Location loc) {
         RegionRepository repository = repositories.get(loc.getWorld());
-        return repository == null ? null : repository.regionAt(loc.getBlockX(), loc.getBlockZ());
+        return repository == null ? null : repository.regionAt(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
     }
 
 }

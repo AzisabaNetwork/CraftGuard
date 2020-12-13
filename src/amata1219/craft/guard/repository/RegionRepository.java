@@ -27,10 +27,10 @@ public class RegionRepository {
             for (int z = lesser.getZ(); z <= greater.getZ(); z++) action.accept(ChunkHashing.hash(x, z));
     }
 
-    public Region regionAt(int x, int z) {
+    public Region regionAt(int x, int y, int z) {
         List<Region> regions = state.get(ChunkHashing.hash(x, z));
         for (Region region : regions)
-            if (region.containsIgnoringYCoordinate(x, z)) return region;
+            if (region.contains(x, y, z)) return region;
 
         return null;
     }

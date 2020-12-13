@@ -4,23 +4,25 @@ import org.bukkit.entity.Player;
 
 import static org.bukkit.ChatColor.*;
 
-public enum Message {
+public class Message {
 
-    CAN_NOT_USE("use"),
-    CAN_NOT_BREAK("break"),
-    CAN_NOT_PLACE("place"),
-    CAN_NOT_HARM("harm"),
-    CAN_NOT_OPEN("open"),
-    CAN_NOT_CHANGE("change");
+    public static final String CAN_NOT_BREAK;
+    public static final String CAN_NOT_PLACE;
+    public static final String CAN_NOT_HARM;
+    public static final String CAN_NOT_OPEN;
+    public static final String CAN_NOT_CHANGE;
+    public static final String CAN_NOT_USE;
 
-    private final String text;
+    static {
+        String format = "" + RED + BOLD + "Hey!" + RESET + GRAY + "Sorry, but you can't %s that here.";
+        CAN_NOT_BREAK = format.formatted("break");
+        CAN_NOT_PLACE = format.formatted("place");
+        CAN_NOT_HARM = format.formatted("harm");
+        CAN_NOT_OPEN = format.formatted("open");
+        CAN_NOT_CHANGE = format.formatted("change");
+        CAN_NOT_USE = format.formatted("use");
 
-    private Message(String actionName) {
-        text = "" + RED + BOLD + "Hey!" + RESET + GRAY + "Sorry, but you can't " + actionName + " that here.";
-    }
 
-    public void message(Player recipient) {
-        recipient.sendMessage(text);
     }
 
 }

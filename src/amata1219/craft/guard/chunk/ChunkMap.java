@@ -27,4 +27,8 @@ public class ChunkMap<V> {
         return state.containsKey(hash) ? state.get(hash) : Collections.emptyList();
     }
 
+    public boolean isEmpty() {
+        return state.isEmpty();
+    }
+
 }

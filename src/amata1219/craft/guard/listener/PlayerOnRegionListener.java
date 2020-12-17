@@ -2,6 +2,7 @@ package amata1219.craft.guard.listener;
 
 import amata1219.craft.guard.Permission;
 import amata1219.craft.guard.extension.PlayerExtension;
+import amata1219.craft.guard.region.Ordinance;
 import amata1219.craft.guard.region.Region;
 import amata1219.craft.guard.region.ShareLevel;
 import amata1219.craft.guard.registry.RegionRepositoryRegistry;
@@ -48,7 +49,7 @@ public class PlayerOnRegionListener implements Listener {
                 AnimalTamer tamer = tameable.getOwner();
                 if (tamer != null) {
                     Region region = registry.regionAt(entity.getLocation());
-                    if (region != null && !region.ownerUUID().equals(tamer.getUniqueId())) {
+                    if (region != null && !region.ownerUUID.equals(tamer.getUniqueId())) {
                         event.setCancelled(true);
                         player.sendMessage(CAN_NOT_USE);
                         return;
@@ -65,7 +66,7 @@ public class PlayerOnRegionListener implements Listener {
         if ((entity instanceof Vehicle && entity instanceof InventoryHolder) || entity instanceof Villager)
             if (handlePlayerOnRegionEvent(event, entity, player, EDITING_CONTAINER_BLOCKS_INVENTORIES, CAN_NOT_OPEN)) return;
 
-        if (entity instanceof Animals || entity instanceof Fish || (entity instanceof Creature && PlayerExtension.itemStackInSpecifiedHand(player, event.getHand()).getType() == Material.LEAD))
+        if (entity instanceof Animals || entity instanceof Fish || (entity instanceof Creature && PlayerExtension.itemStackInPlayerHand(player, event.getHand()).getType() == Material.LEAD))
             handlePlayerOnRegionEvent(event, entity, player, EDITING_BLOCKS_AND_ENTITIES, CAN_NOT_USE);
     }
 
@@ -135,16 +136,20 @@ public class PlayerOnRegionListener implements Listener {
                 if (RIGHT_CLICK_BLOCK_WATCH_LIST.contains(type))
                     if (handlePlayerOnRegionEvent(event, block, player, EDITING_BLOCKS_AND_ENTITIES, CAN_NOT_CHANGE)) return;
 
-                Material itemInHandType = PlayerExtension.itemStackInSpecifiedHand(player, event.getHand()).getType();
-                if (RIGHT_CLICK_ITEM_WATCH_LIST.contains(itemInHandType))
+                Material typeOfItemInHand = PlayerExtension.itemStackInPlayerHand(player, event.getHand()).getType();
+                if (RIGHT_CLICK_ITEM_WATCH_LIST.contains(typeOfItemInHand))
                     if (handlePlayerOnRegionEvent(event, block, player, EDITING_BLOCKS_AND_ENTITIES, CAN_NOT_USE)) return;
 
-                if (VEHICLE_LIST.contains(itemInHandType)) {
+                if (MINECART_LIST.contains(typeOfItemInHand)) {
                     Region region = registry.regionAt(block.getLocation());
-                    if (region != null && !region.isSatisfiedWithPlayerShareLevel(player.getUniqueId(), EDITING_BLOCKS_AND_ENTITIES)) {
+                    if (region != null && region.isEnactedOrdinance(Ordinance.NOT_ALLOWED_TO_PLACE_MINECARTS) && region.isNotSatisfiedWithPlayerShareLevel(player.getUniqueId(), EDITING_BLOCKS_AND_ENTITIES)) {
                         event.setCancelled(true);
                         player.sendMessage(CAN_NOT_PLACE);
                     }
+                }
+
+                if (BOAT_LIST.contains(typeOfItemInHand)) {
+
                 }
             }
         }
@@ -181,7 +186,8 @@ public class PlayerOnRegionListener implements Listener {
 
     private static final Set<Material> RIGHT_CLICK_BLOCK_WATCH_LIST;
     private static final Set<Material> RIGHT_CLICK_ITEM_WATCH_LIST;
-    private static final Set<Material> VEHICLE_LIST;
+    private static final Set<Material> MINECART_LIST;
+    private static final Set<Material> BOAT_LIST;
 
     static {
         RIGHT_CLICK_BLOCK_WATCH_LIST = Collections.unmodifiableSet(EnumSet.of(
@@ -196,13 +202,15 @@ public class PlayerOnRegionListener implements Listener {
         ));
 
         Set<Material> rightClickItemWatchList = new HashSet<>();
-        Set<Material> vehicleList = new HashSet<>();
+        Set<Material> minecartList = new HashSet<>();
+        Set<Material> boatList = new HashSet<>();
         for (Material type : Material.values()) {
             if (type.isLegacy()) continue;
 
             String name = type.name();
             if (name.endsWith("_SPAWN_EGG") || name.endsWith("_DYE")) rightClickItemWatchList.add(type);
-            else if (name.endsWith("_MINECART") || name.endsWith("_BOAT")) vehicleList.add(type);
+            else if (name.endsWith("_MINECART")) minecartList.add(type);
+            else if (name.endsWith("_BOAT")) boatList.add(type);
         }
 
         rightClickItemWatchList.addAll(Arrays.asList(
@@ -214,12 +222,13 @@ public class PlayerOnRegionListener implements Listener {
         ));
 
         RIGHT_CLICK_ITEM_WATCH_LIST = Collections.unmodifiableSet(rightClickItemWatchList);
-        VEHICLE_LIST = Collections.unmodifiableSet(vehicleList);
+        MINECART_LIST = Collections.unmodifiableSet(minecartList);
+        BOAT_LIST = Collections.unmodifiableSet(boatList);
     }
 
     private boolean handlePlayerOnRegionEvent(Cancellable event, Location loc, Player player, ShareLevel required, String error) {
         Region region = registry.regionAt(loc);
-        if (region != null && !region.isSatisfiedWithPlayerShareLevel(player.getUniqueId(), required)) {
+        if (region != null && region.isNotSatisfiedWithPlayerShareLevel(player.getUniqueId(), required)) {
             event.setCancelled(true);
             player.sendMessage(error);
             return true;

@@ -10,7 +10,7 @@ public class PlayerExtension {
 
     private static final ItemStack AIR = new ItemStack(Material.AIR);
 
-    public static ItemStack itemStackInSpecifiedHand(Player player, EquipmentSlot slot) {
+    public static ItemStack itemStackInPlayerHand(Player player, EquipmentSlot slot) {
         PlayerInventory inventory = player.getInventory();
         return switch (slot) {
             case HAND -> inventory.getItemInMainHand();

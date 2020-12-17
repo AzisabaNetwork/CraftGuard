@@ -1,40 +1,59 @@
 package amata1219.craft.guard.region;
 
+import org.bukkit.Location;
 import org.bukkit.World;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.UUID;
 
-public record Region(
-        int id,
-        RegionType type,
-        World world,
-        Location3d lesser,
-        Location3d greater,
-        UUID ownerUUID,
-        HashSet<Ordinance> ordinances,
-        HashMap<UUID, ShareLevel> shareLevels
-) {
+public abstract class Region {
 
-    public Region(int id, RegionType type, World world, Location3d lesser, Location3d greater, UUID ownerUUID, HashSet<Ordinance> ordinances) {
-        this(id, type, world, lesser, greater, ownerUUID, ordinances, initializedShareLevelsMap(ownerUUID));
-    }
+    public final int id;
+    public final RegionType type;
+    public final World world;
+    public final Location3d lesser;
+    public final Location3d greater;
+    public final UUID ownerUUID;
+    public final HashSet<Ordinance> ordinances;
+    public final HashMap<UUID, ShareLevel> shareLevels;
 
-    private static HashMap<UUID, ShareLevel> initializedShareLevelsMap(UUID ownerUUID) {
-        HashMap<UUID, ShareLevel> shareLevels = new HashMap<>();
+    public Region(
+            int id,
+            RegionType type,
+            World world,
+            Location3d lesser,
+            Location3d greater,
+            UUID ownerUUID,
+            HashSet<Ordinance> ordinances,
+            HashMap<UUID, ShareLevel> shareLevels
+    ) {
+        this.id = id;
+        this.type = type;
+        this.world = world;
+        this.lesser = lesser;
+        this.greater = greater;
+        this.ownerUUID = ownerUUID;
+        this.ordinances = ordinances;
+
         shareLevels.put(ownerUUID, ShareLevel.EDITING_REGION);
-        return  shareLevels;
+        this.shareLevels = shareLevels;
     }
 
-    public boolean contains(int x, int y, int z) {
+    public boolean containsLocation(int x, int y, int z) {
         return lesser.x() <= x && lesser.z() <= z && x <= greater.x() && z <= greater.z() && lesser.y() <= y && y <= greater.y();
     }
 
-    public boolean isSatisfiedWithPlayerShareLevel(UUID playerUUID, ShareLevel required) {
-        ShareLevel level = shareLevels.get(playerUUID);
-        if (level == null) return false;
-        return level.ordinal() >= required.ordinal();
+    public abstract boolean isEnactedOrdinance(Ordinance ordinance);
+
+    public boolean isNotEnactedOrdinance(Ordinance ordinance) {
+        return !isEnactedOrdinance(ordinance);
+    }
+
+    public abstract boolean isSatisfiedWithPlayerShareLevel(UUID playerUUID, ShareLevel required);
+
+    public boolean isNotSatisfiedWithPlayerShareLevel(UUID playerUUID, ShareLevel required) {
+        return !isSatisfiedWithPlayerShareLevel(playerUUID, required);
     }
 
 }

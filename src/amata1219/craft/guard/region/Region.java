@@ -1,6 +1,5 @@
 package amata1219.craft.guard.region;
 
-import org.bukkit.Location;
 import org.bukkit.World;
 
 import java.util.HashMap;
@@ -36,7 +35,7 @@ public abstract class Region {
         this.ownerUUID = ownerUUID;
         this.ordinances = ordinances;
 
-        shareLevels.put(ownerUUID, ShareLevel.EDITING_REGION);
+        shareLevels.put(ownerUUID, ShareLevel.L3);
         this.shareLevels = shareLevels;
     }
 

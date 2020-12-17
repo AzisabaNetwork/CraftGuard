@@ -5,7 +5,7 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class CraftGuard extends JavaPlugin {
+public class CraftGuard extends JavaPlugin implements CraftGuardAPI {
 
     private static CraftGuard instance;
 
@@ -29,7 +29,8 @@ public class CraftGuard extends JavaPlugin {
         return instance;
     }
 
-    public RegionRepositoryRegistry regionRepositoryRegistry() {
+    @Override
+    public RegionRepositoryRegistry registry() {
         return regionRepositoryRegistry;
     }
 

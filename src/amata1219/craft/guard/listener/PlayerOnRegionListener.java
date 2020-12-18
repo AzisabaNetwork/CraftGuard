@@ -3,16 +3,13 @@ package amata1219.craft.guard.listener;
 import amata1219.craft.guard.constant.Permission;
 import amata1219.craft.guard.extension.Lazy;
 import amata1219.craft.guard.extension.LazyRegion;
-import amata1219.craft.guard.extension.PlayerExtension;
-import amata1219.craft.guard.region.Ordinance;
+import amata1219.craft.guard.extension.bukkit.PlayerExtension;
 import amata1219.craft.guard.region.Region;
-import amata1219.craft.guard.region.ShareLevel;
 import amata1219.craft.guard.registry.RegionRepositoryRegistry;
 import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.block.Block;
 import org.bukkit.entity.*;
-import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -23,7 +20,9 @@ import org.bukkit.inventory.InventoryHolder;
 import java.util.*;
 
 import static amata1219.craft.guard.constant.Message.*;
-import static amata1219.craft.guard.region.Ordinance.*;
+import static amata1219.craft.guard.handler.PlayerOnRegionEventHandler.handlePlayerOnRegionEvent;
+import static amata1219.craft.guard.region.Ordinance.NOT_ALLOWED_TO_PLACE_BOATS;
+import static amata1219.craft.guard.region.Ordinance.NOT_ALLOWED_TO_PLACE_MINECARTS;
 import static amata1219.craft.guard.region.ShareLevel.*;
 
 public class PlayerOnRegionListener implements Listener {
@@ -227,26 +226,6 @@ public class PlayerOnRegionListener implements Listener {
 
     private boolean isAdministrator(Player player) {
         return player.hasPermission(Permission.ADMIN);
-    }
-
-    private static boolean handlePlayerOnRegionEvent(Cancellable event, Lazy<Region> regionSupplier, Player player, ShareLevel required, String error) {
-        Region region = regionSupplier.value();
-        if (region != null && region.isNotSatisfiedWithPlayerShareLevel(player.getUniqueId(), required)) {
-            event.setCancelled(true);
-            player.sendMessage(error);
-            return true;
-        }
-        return false;
-    }
-
-    private boolean handlePlayerOnRegionEvent(Cancellable event, Lazy<Region> regionSupplier, Player player, Ordinance ordinance, ShareLevel required, String error) {
-        Region region = regionSupplier.value();
-        if (region != null && region.isEnactedOrdinance(ordinance) && region.isNotSatisfiedWithPlayerShareLevel(player.getUniqueId(), required)) {
-            event.setCancelled(true);
-            player.sendMessage(error);
-            return true;
-        }
-        return false;
     }
 
 }

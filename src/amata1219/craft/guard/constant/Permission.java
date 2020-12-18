@@ -1,4 +1,4 @@
-package amata1219.craft.guard;
+package amata1219.craft.guard.constant;
 
 public class Permission {
 

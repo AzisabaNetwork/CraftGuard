@@ -1,4 +1,4 @@
-package amata1219.craft.guard;
+package amata1219.craft.guard.constant;
 
 import static org.bukkit.ChatColor.*;
 

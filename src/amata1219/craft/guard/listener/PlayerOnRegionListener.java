@@ -1,6 +1,6 @@
 package amata1219.craft.guard.listener;
 
-import amata1219.craft.guard.Permission;
+import amata1219.craft.guard.constant.Permission;
 import amata1219.craft.guard.extension.Lazy;
 import amata1219.craft.guard.extension.LazyRegion;
 import amata1219.craft.guard.extension.PlayerExtension;
@@ -22,7 +22,7 @@ import org.bukkit.inventory.InventoryHolder;
 
 import java.util.*;
 
-import static amata1219.craft.guard.Message.*;
+import static amata1219.craft.guard.constant.Message.*;
 import static amata1219.craft.guard.region.Ordinance.*;
 import static amata1219.craft.guard.region.ShareLevel.*;
 

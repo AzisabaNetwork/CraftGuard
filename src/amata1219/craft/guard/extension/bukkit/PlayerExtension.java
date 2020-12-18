@@ -1,4 +1,4 @@
-package amata1219.craft.guard.extension;
+package amata1219.craft.guard.extension.bukkit;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
